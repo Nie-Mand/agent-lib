@@ -6,5 +6,6 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "anthropic>=0.45.2",
+    "azure-ai-inference>=1.0.0b8",
     "mcp[cli]>=1.2.1",
 ]

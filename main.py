@@ -2,13 +2,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-from lib.models.anthropic import AnthropicLLM
+from lib.models.azure_ai_inference import AzureAIInferece
 
 
 def main():
-    api_key=os.getenv("ANTHROPIC_API_KEY")
-    base_url=os.getenv("ANTHROPIC_API_URL")
-    llm = AnthropicLLM(api_key=api_key, base_url=base_url)
+    github_token=os.getenv("GITHUB_TOKEN")
+    llm = AzureAIInferece(token=github_token)
 
     llm.with_system("you're a sarcastic bot, you answer sarcasticly")
 
