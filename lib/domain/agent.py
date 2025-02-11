@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from metadata import Metadata
+from lib.domain.metadata import Metadata
 
 class Agent(ABC):
     @abstractmethod
-    def call(self, _query: str, _metadata: Metadata):
+    async def call(self, _query: str, _metadata: Metadata) -> str:
         pass

@@ -17,6 +17,7 @@ class MCPClient(tools_connector.ToolsConnector):
         self.session: ClientSession
         self.exit_stack = AsyncExitStack()
         self.servers = servers
+        self.tools = []
 
     async def connect(self):
         # TODO: Connect to multiple servers
@@ -33,12 +34,22 @@ class MCPClient(tools_connector.ToolsConnector):
         self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
         await self.session.initialize()
 
+        self.tools = await self._list()
 
-    async def list(self) -> list:
+    def list(self) -> list:
+        return self.tools
+
+    async def _list(self):
         response = await self.session.list_tools()
         return response.tools
 
-    async def call(self, tool):
+    async def call(self, tool: str, args: dict):
+        print("calling tool", tool, args)
+        result = await self.session.call_tool(tool, args)
+        response = result.content[0]
+        if response.type == "text":
+            return response.text
+
         return None
 
     async def cleanup(self):

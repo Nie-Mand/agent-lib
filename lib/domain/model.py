@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from lib.domain.response import LLMResponse
+from lib.domain.metadata import Metadata
 
 class ConversationalAgent(ABC):
     @abstractmethod
@@ -10,5 +12,5 @@ class ConversationalAgent(ABC):
         pass
 
     @abstractmethod
-    def prompt(self, *messages: str) -> str:
-        return ""
+    def prompt(self, _message: str, _metadata: Metadata) -> LLMResponse:
+        pass

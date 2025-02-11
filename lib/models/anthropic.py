@@ -23,6 +23,8 @@ class AnthropicResponse(response.LLMResponse):
         last = self.message.content[-1]
         return last is not TextBlock
 
+    def get_call(self) -> tuple[str, str]:
+        return "", ""
 
 class AnthropicLLM(model.ConversationalAgent):
     system: str = ""
@@ -48,7 +50,7 @@ class AnthropicLLM(model.ConversationalAgent):
     def _get_messages(self, messages: list[str]) -> list[MessageParam]:
         return [{"role": "user", "content": msg} for msg in messages]
 
-    def prompt(self, *_messages: str) -> str:
+    def prompt(self, *_messages: str) -> AnthropicResponse:
         messages = self._get_messages(list(_messages))
 
         response = self._anthropic.messages.create(
@@ -59,8 +61,4 @@ class AnthropicLLM(model.ConversationalAgent):
             system=self.system,
         )
 
-        response = AnthropicResponse(response)
-        if response.is_text():
-            return response.get()
-
-        return ""
+        return AnthropicResponse(response)

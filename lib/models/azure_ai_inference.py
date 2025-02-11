@@ -1,7 +1,9 @@
-from lib.domain import model, response
+import json
+from lib.domain import model, response, metadata
 from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.models import SystemMessage, ChatCompletions, UserMessage
+from azure.ai.inference.models import ChatCompletions, SystemMessage
 from azure.core.credentials import AzureKeyCredential
+from lib.models.openai_history import ChatHistory
 
 class AzureAIResponse(response.LLMResponse):
     def __init__(self, _message: ChatCompletions):
@@ -17,19 +19,37 @@ class AzureAIResponse(response.LLMResponse):
         msg = self._get_message()
         return msg.content is not None and len(msg.content) > 0
 
+    def get_call(self) -> response.Call:
+        # Only one tool call is supported
+        message = self.get_call_message()
+        id = message['tool_calls'][0]['id']
+        function = message['tool_calls'][0]['function']
+        name = function['name']
+        arguments = json.loads(function['arguments'])
+        return response.Call(id, name, arguments)
+
+    def get_call_message(self):
+        return self.message.choices[-1]['message']
 
     def is_call(self) -> bool:
-        return False
+        return not self.is_text()
 
 
 class AzureAIInferece(model.ConversationalAgent):
     system: str = ""
     tools: list = []
 
-    def __init__(self, system: str = "", tools: list = [], *args, **kwargs):
+    def __init__(self, system: str = "", tools: list = [], history = ChatHistory(), *args, **kwargs):
         token = kwargs.get("token", "")
         self.system = system
-        self.tools = tools
+        self.tools = [{
+            "type": "function",
+            "function": {
+                "name": tool.name,
+                "description": tool.description,
+                "input_schema": tool.inputSchema
+            }
+        } for tool in tools]
         self.client = ChatCompletionsClient(
             endpoint="https://models.github.ai/inference",
             credential=AzureKeyCredential(token),
@@ -38,28 +58,47 @@ class AzureAIInferece(model.ConversationalAgent):
 
         self.model = kwargs.get("model", "gpt-4o")
         self.max_tokens = kwargs.get("max_tokens", 4096)
+        self.chat_history = history
 
     def with_system(self, system: str):
         self.system = system
 
     def with_tools(self, tools: list):
-        self.tools = tools
+        self.tools = [{
+            "type": "function",
+            "function": {
+                "name": tool.name,
+                "description": tool.description,
+                "input_schema": tool.inputSchema
+            }
+        } for tool in tools]
 
+    def prompt(self, _message: str, _metadata: metadata.Metadata) -> AzureAIResponse:
+        if len(_message) != 0:
+            self.chat_history.push("user", _message, _metadata)
 
-    def prompt(self, *_messages: str) -> str:
+        messages: list = [SystemMessage(self.system)]
+        for message in self.chat_history.get(_metadata):
+            messages.append(message)
+
+        print("messages", messages)
+
         response = self.client.complete(
-            messages=[
-                SystemMessage(content=self.system),
-                UserMessage(content=_messages[0]),
-            ],
+            messages=messages,
             model=self.model,
             temperature=1,
             max_tokens=self.max_tokens,
-            top_p=1
+            top_p=1,
+            tools=self.tools,
         )
 
         response = AzureAIResponse(response)
-        if response.is_text():
-            return response.get()
 
-        return ""
+        if response.is_text():
+            content = response.get()
+            self.chat_history.push("assistant", content, _metadata)
+        else:
+            call = response.get_call_message()
+            self.chat_history.push("tool_call", call, _metadata)
+
+        return response
