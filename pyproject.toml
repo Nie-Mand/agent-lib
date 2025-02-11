@@ -1,5 +1,5 @@
 [project]
-name = "phoenix"
+name = "phoenix-agents"
 version = "0.1.0"
 description = "A custom GenAI agent framework"
 readme = "README.md"
