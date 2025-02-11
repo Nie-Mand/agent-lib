@@ -4,20 +4,21 @@ from phoenix.domain.metadata import Metadata
 from phoenix.domain.history import History
 from phoenix.domain.model import ConversationalAgent
 from phoenix.domain.tools_connector import ToolsConnector
+from phoenix.connectors.dummy import DummyConnector
 
 class Agent(CoreAgent):
     def __init__(self,
-        brain: ConversationalAgent,
-        connector: ToolsConnector,
-        history: History,
-        system: str = "",
-        tools: list = []
+        _brain: ConversationalAgent,
+        _history: History,
+        _connector: ToolsConnector = DummyConnector(),
+        _system: str = "",
+        _tools: list = []
     ):
-        self.brain = brain
-        self.tools = tools
-        self.history = history
-        self.system = system
-        self.connector = connector
+        self.brain = _brain
+        self.tools = _tools
+        self.history = _history
+        self.system = _system
+        self.connector = _connector
 
         self.brain.with_system(self.system)
         self.brain.with_tools(self.tools)

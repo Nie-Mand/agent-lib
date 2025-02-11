@@ -1,3 +1,4 @@
+from typing_extensions import Any
 from phoenix.domain import tools_connector
 from contextlib import AsyncExitStack
 from mcp import ClientSession, StdioServerParameters
@@ -42,7 +43,7 @@ class MCPClient(tools_connector.ToolsConnector):
         print("registered tools:", [tool.name for tool in response.tools])
         return response.tools
 
-    async def call(self, tool: str, args: dict):
+    async def call(self, tool: str, args: dict) -> Any:
         result = await self.session.call_tool(tool, args)
         response = result.content[0]
         if response.type == "text":

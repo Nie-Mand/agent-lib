@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing_extensions import Any
 
 class ToolsConnector(ABC):
     @abstractmethod
@@ -6,5 +7,5 @@ class ToolsConnector(ABC):
         pass
 
     @abstractmethod
-    async def call(self, tool: str, args: dict):
+    async def call(self, tool: str, args: dict) -> Any:
         pass
