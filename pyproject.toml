@@ -11,6 +11,9 @@ dependencies = [
     "mcp[cli]>=1.2.1",
 ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/phoenix"]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
