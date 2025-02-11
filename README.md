@@ -58,7 +58,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-Here's a simple example using Phoenix to create a moody AI agent with MCP connectors:
+Here's a simple example using Phoenix to create a moody AI agent with MCP connectors (The full example can be found in [Moody AI Repository](https://github.com/Nie-Mand/moody-agent)):
 
 ```python
 from dotenv import load_dotenv
