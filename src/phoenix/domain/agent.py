@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.phoenix.domain.metadata import Metadata
+from phoenix.domain.metadata import Metadata
 
 class Agent(ABC):
     @abstractmethod

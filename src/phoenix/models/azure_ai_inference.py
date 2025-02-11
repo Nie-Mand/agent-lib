@@ -1,6 +1,6 @@
 import json
-from src.phoenix.domain import model, response, metadata
-from src.phoenix.models.openai_history import ChatHistory
+from phoenix.domain import model, response, metadata
+from phoenix.models.openai_history import ChatHistory
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import ChatCompletions, SystemMessage
 from azure.core.credentials import AzureKeyCredential

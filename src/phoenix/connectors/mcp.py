@@ -1,4 +1,4 @@
-from src.phoenix.domain import tools_connector
+from phoenix.domain import tools_connector
 from contextlib import AsyncExitStack
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client

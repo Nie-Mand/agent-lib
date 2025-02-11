@@ -1,11 +1,16 @@
 [project]
-name = "agent-template"
+name = "phoenix"
 version = "0.1.0"
-description = "Add your description here"
+description = "A custom GenAI agent framework"
 readme = "README.md"
+authors = [{ name = "Nie-Mand" }]
 requires-python = ">=3.13"
 dependencies = [
     "anthropic>=0.45.2",
     "azure-ai-inference>=1.0.0b8",
     "mcp[cli]>=1.2.1",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from src.phoenix.domain.response import LLMResponse
-from src.phoenix.domain.metadata import Metadata
+from phoenix.domain.response import LLMResponse
+from phoenix.domain.metadata import Metadata
 
 class ConversationalAgent(ABC):
     @abstractmethod

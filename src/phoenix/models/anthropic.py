@@ -1,4 +1,4 @@
-from src.phoenix.domain import model, response
+from phoenix.domain import model, response
 from anthropic import Anthropic
 from anthropic.types.message import Message  as ResponseMessage
 from anthropic.types.text_block import TextBlock

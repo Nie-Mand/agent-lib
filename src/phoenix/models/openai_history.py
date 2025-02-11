@@ -1,4 +1,4 @@
-from src.phoenix.domain import history, metadata
+from phoenix.domain import history, metadata
 
 class ChatHistory(history.History):
     def __init__(self):

@@ -1,4 +1,4 @@
-import src.phoenix.domain.metadata as metadata
+import phoenix.domain.metadata as metadata
 import uuid
 
 class UserSession(metadata.Metadata):

@@ -1,9 +1,9 @@
-from src.phoenix.domain import history
-from src.phoenix.domain.agent import Agent as CoreAgent
-from src.phoenix.domain.metadata import Metadata
-from src.phoenix.domain.history import History
-from src.phoenix.domain.model import ConversationalAgent
-from src.phoenix.domain.tools_connector import ToolsConnector
+from phoenix.domain import history
+from phoenix.domain.agent import Agent as CoreAgent
+from phoenix.domain.metadata import Metadata
+from phoenix.domain.history import History
+from phoenix.domain.model import ConversationalAgent
+from phoenix.domain.tools_connector import ToolsConnector
 
 class Agent(CoreAgent):
     def __init__(self,
