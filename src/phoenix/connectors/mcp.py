@@ -39,6 +39,7 @@ class MCPClient(tools_connector.ToolsConnector):
 
     async def _list(self):
         response = await self.session.list_tools()
+        print("registered tools:", [tool.name for tool in response.tools])
         return response.tools
 
     async def call(self, tool: str, args: dict):
