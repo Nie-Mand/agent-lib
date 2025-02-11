@@ -81,13 +81,17 @@ class AzureAIInferece(model.ConversationalAgent):
         for message in self.chat_history.get(_metadata):
             messages.append(message)
 
+        tools = self.tools
+        if len(tools) == 0:
+            tools = None
+
         response = self.client.complete(
             messages=messages,
             model=self.model,
             temperature=1,
             max_tokens=self.max_tokens,
             top_p=1,
-            tools=self.tools,
+            tools=tools,
         )
 
         response = AzureAIResponse(response)
