@@ -1,17 +1,15 @@
-from lib.utils import mcp_servers_path_getter
-from lib.clients import mcp
 from dotenv import load_dotenv
 import asyncio
 load_dotenv()
 
 import os
-from lib import utils
+import utils
 
-from lib.models.azure_ai_inference import AzureAIInferece
-import lib.models.openai_history as openai_history
-from lib.clients.mcp import MCPClient, MCPServer
-from lib.agent import Agent
-from lib.user_session import UserSession
+from src.phoenix.models.azure_ai_inference import AzureAIInferece
+import src.phoenix.models.openai_history as openai_history
+from src.phoenix.connectors.mcp import MCPClient, MCPServer
+from src.phoenix.agent import Agent
+from src.phoenix.user_session import UserSession
 
 async def main():
     # LLM
