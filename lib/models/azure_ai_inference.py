@@ -81,8 +81,6 @@ class AzureAIInferece(model.ConversationalAgent):
         for message in self.chat_history.get(_metadata):
             messages.append(message)
 
-        print("messages", messages)
-
         response = self.client.complete(
             messages=messages,
             model=self.model,
