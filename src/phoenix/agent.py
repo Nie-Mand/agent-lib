@@ -32,7 +32,7 @@ class Agent(CoreAgent):
         while True:
             response = self.brain.prompt(_query, _metadata)
 
-            print("x", response)
+            print("x", response.get())
 
             if response.is_text():
                 out += response.get()
