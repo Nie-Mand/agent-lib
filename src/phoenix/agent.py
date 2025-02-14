@@ -34,6 +34,10 @@ class Agent(CoreAgent):
 
             if response.is_text():
                 out += response.get()
+
+            if not response.is_call():
+                break
+
             if response.is_call():
                 call = response.get_call()
                 result = await self.connector.call(call.name, call.arguments)
