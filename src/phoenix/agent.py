@@ -27,11 +27,11 @@ class Agent(CoreAgent):
             self.brain.with_tools(tools)
 
     async def call(self, _query: str, _metadata: Metadata) -> str:
+        print("x", _query)
         out = ""
 
         while True:
             response = self.brain.prompt(_query, _metadata)
-
             print("x", response.get())
 
             if response.is_text():
