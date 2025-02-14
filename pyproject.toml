@@ -1,6 +1,6 @@
 [project]
 name = "phoenix-agents"
-version = "0.1.9"
+version = "0.1.10"
 description = "A custom GenAI agent framework"
 readme = "README.md"
 authors = [{ name = "Nie-Mand" }]

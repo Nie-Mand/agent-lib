@@ -33,6 +33,7 @@ class AzureAIResponse(response.LLMResponse):
 
     def is_call(self) -> bool:
         message = self.get_call_message()
+        print("debug", message)
         if "tools_connector" in message and len(message['tool_calls']) > 0:
             return True
         return False
