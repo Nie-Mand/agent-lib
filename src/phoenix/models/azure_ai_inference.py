@@ -1,5 +1,3 @@
-from src.phoenix.domain import tools_connector
-from json import tool
 import json
 from phoenix.domain import model, response, metadata
 from phoenix.models.openai_history import ChatHistory
