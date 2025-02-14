@@ -33,7 +33,6 @@ class AzureAIResponse(response.LLMResponse):
 
     def is_call(self) -> bool:
         message = self.get_call_message()
-        print("debug", message)
         if "tool_calls" in message and len(message['tool_calls']) > 0:
             return True
         return False
@@ -62,6 +61,7 @@ class AzureAIInferece(model.ConversationalAgent):
 
         self.model = kwargs.get("model", "gpt-4o")
         self.max_tokens = kwargs.get("max_tokens", 4096)
+        self.temperature = kwargs.get("temperature", 0.7)
         self.chat_history = history
 
     def with_system(self, system: str):
@@ -92,7 +92,7 @@ class AzureAIInferece(model.ConversationalAgent):
         response = self.client.complete(
             messages=messages,
             model=self.model,
-            temperature=1,
+            temperature=self.temperature,
             max_tokens=self.max_tokens,
             top_p=1,
             tools=tools,

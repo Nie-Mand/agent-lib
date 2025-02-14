@@ -31,8 +31,6 @@ class Agent(CoreAgent):
 
         while True:
             response = self.brain.prompt(_query, _metadata)
-            print("debug", response.get())
-            print("debug", response.is_call())
 
             if response.is_text():
                 out += response.get()
@@ -43,7 +41,6 @@ class Agent(CoreAgent):
             if response.is_call():
                 call = response.get_call()
                 result = await self.connector.call(call.name, call.arguments)
-                print("result", result)
                 self.history.push("tool", {
                     "name": call.name,
                     "id": call.id,
