@@ -89,6 +89,7 @@ class AzureAIInferece(model.ConversationalAgent):
         if len(tools) == 0:
             tools = None
 
+        print("x", _message)
         response = self.client.complete(
             messages=messages,
             model=self.model,
@@ -97,6 +98,7 @@ class AzureAIInferece(model.ConversationalAgent):
             top_p=1,
             tools=tools,
         )
+        print("y", response)
 
         response = AzureAIResponse(response)
 

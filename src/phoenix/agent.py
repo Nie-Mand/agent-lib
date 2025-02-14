@@ -27,7 +27,6 @@ class Agent(CoreAgent):
             self.brain.with_tools(tools)
 
     async def call(self, _query: str, _metadata: Metadata) -> str:
-        print("x", _query)
         out = ""
 
         while True:
