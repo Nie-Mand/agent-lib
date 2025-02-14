@@ -43,12 +43,13 @@ class Agent(CoreAgent):
             if response.is_call():
                 call = response.get_call()
                 result = await self.connector.call(call.name, call.arguments)
+                print("result", result)
                 self.history.push("tool", {
                     "name": call.name,
                     "id": call.id,
                     "content": result
                 }, _metadata)
-                response = self.brain.prompt("", _metadata)
-                out += "\"Figuring things out\""
+                out += "\n\"Figuring things out\"\n"
+                _query = ""
 
         return out
