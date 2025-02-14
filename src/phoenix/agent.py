@@ -27,16 +27,22 @@ class Agent(CoreAgent):
             self.brain.with_tools(tools)
 
     async def call(self, _query: str, _metadata: Metadata) -> str:
-        response = self.brain.prompt(_query, _metadata)
-        if response.is_call():
-            call = response.get_call()
-            result = await self.connector.call(call.name, call.arguments)
-            self.history.push("tool", {
-                "name": call.name,
-                "id": call.id,
-                "content": result
-            }, _metadata)
-            response = self.brain.prompt("", _metadata)
-            print("result", result)
+        out = ""
 
-        return response.get()
+        while True:
+            response = self.brain.prompt(_query, _metadata)
+
+            if response.is_text():
+                out += response.get()
+            if response.is_call():
+                call = response.get_call()
+                result = await self.connector.call(call.name, call.arguments)
+                self.history.push("tool", {
+                    "name": call.name,
+                    "id": call.id,
+                    "content": result
+                }, _metadata)
+                response = self.brain.prompt("", _metadata)
+                out += "\"Figuring things out\""
+
+        return out

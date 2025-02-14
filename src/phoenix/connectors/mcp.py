@@ -30,7 +30,11 @@ class MCPClient(tools_connector.ToolsConnector):
 
         stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
         self.stdio, self.write = stdio_transport
-        self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
+        self.session = await self.exit_stack.enter_async_context(
+            ClientSession(
+                self.stdio, self.write
+            )
+        )
         await self.session.initialize()
 
         self.tools = await self._list()
@@ -40,7 +44,6 @@ class MCPClient(tools_connector.ToolsConnector):
 
     async def _list(self):
         response = await self.session.list_tools()
-        print("registered tools:", [tool.name for tool in response.tools])
         return response.tools
 
     async def call(self, tool: str, args: dict) -> Any:

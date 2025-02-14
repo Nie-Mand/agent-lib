@@ -1,3 +1,5 @@
+from src.phoenix.domain import tools_connector
+from json import tool
 import json
 from phoenix.domain import model, response, metadata
 from phoenix.models.openai_history import ChatHistory
@@ -32,7 +34,10 @@ class AzureAIResponse(response.LLMResponse):
         return self.message.choices[-1]['message']
 
     def is_call(self) -> bool:
-        return not self.is_text()
+        message = self.get_call_message()
+        if "tools_connector" in message and len(message['tool_calls']) > 0:
+            return True
+        return False
 
 
 class AzureAIInferece(model.ConversationalAgent):
@@ -99,7 +104,8 @@ class AzureAIInferece(model.ConversationalAgent):
         if response.is_text():
             content = response.get()
             self.chat_history.push("assistant", content, _metadata)
-        else:
+
+        if response.is_call():
             call = response.get_call_message()
             self.chat_history.push("tool_call", call, _metadata)
 
