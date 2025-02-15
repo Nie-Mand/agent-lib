@@ -31,7 +31,6 @@ class Agent(CoreAgent):
 
         while True:
             response = self.brain.prompt(_query, _metadata)
-            print("x", response.get())
 
             if response.is_text():
                 out += response.get()
@@ -45,7 +44,7 @@ class Agent(CoreAgent):
                 self.history.push("tool", {
                     "name": call.name,
                     "id": call.id,
-                    "content": result
+                    "content": str(result)
                 }, _metadata)
                 out += "\n\"Figuring things out\"\n"
                 _query = ""

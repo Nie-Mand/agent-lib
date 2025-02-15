@@ -48,11 +48,7 @@ class MCPClient(tools_connector.ToolsConnector):
 
     async def call(self, tool: str, args: dict) -> Any:
         result = await self.session.call_tool(tool, args)
-        response = result.content[0]
-        if response.type == "text":
-            return response.text
-
-        return None
+        return [response.text for response in result.content if response.type == "text"]
 
     async def cleanup(self):
         await self.exit_stack.aclose()

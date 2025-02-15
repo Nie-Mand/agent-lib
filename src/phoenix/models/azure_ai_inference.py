@@ -45,37 +45,43 @@ class AzureAIInferece(model.ConversationalAgent):
     def __init__(self, system: str = "", tools: list = [], history = ChatHistory(), *args, **kwargs):
         token = kwargs.get("token", "")
         self.system = system
-        self.tools = [{
-            "type": "function",
-            "function": {
-                "name": tool.name,
-                "description": tool.description,
-                "input_schema": tool.inputSchema
-            }
-        } for tool in tools]
         self.client = ChatCompletionsClient(
             endpoint="https://models.github.ai/inference",
             credential=AzureKeyCredential(token),
         )
 
-
         self.model = kwargs.get("model", "gpt-4o")
         self.max_tokens = kwargs.get("max_tokens", 4096)
         self.temperature = kwargs.get("temperature", 0.7)
         self.chat_history = history
+        self._format_tools(tools)
 
     def with_system(self, system: str):
         self.system = system
 
+
+    def _format_tools(self, tools):
+        if "llama" in self.model.lower():
+            self.tools = [{
+                "type": "function",
+                "function": {
+                    "name": tool.name,
+                    "description": tool.description,
+                    "parameters": tool.inputSchema
+                }
+            } for tool in tools]
+        else:
+            self.tools = [{
+                "type": "function",
+                "function": {
+                    "name": tool.name,
+                    "description": tool.description,
+                    "input_schema": tool.inputSchema
+                }
+            } for tool in tools]
+
     def with_tools(self, tools: list):
-        self.tools = [{
-            "type": "function",
-            "function": {
-                "name": tool.name,
-                "description": tool.description,
-                "input_schema": tool.inputSchema
-            }
-        } for tool in tools]
+        self._format_tools(tools)
 
     def prompt(self, _message: str, _metadata: metadata.Metadata) -> AzureAIResponse:
         if len(_message) != 0:
@@ -89,7 +95,6 @@ class AzureAIInferece(model.ConversationalAgent):
         if len(tools) == 0:
             tools = None
 
-        print("x", _message)
         response = self.client.complete(
             messages=messages,
             model=self.model,
@@ -98,7 +103,6 @@ class AzureAIInferece(model.ConversationalAgent):
             top_p=1,
             tools=tools,
         )
-        print("y", response)
 
         response = AzureAIResponse(response)
 
