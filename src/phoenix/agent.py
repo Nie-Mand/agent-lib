@@ -46,7 +46,6 @@ class Agent(CoreAgent):
                     "id": call.id,
                     "content": str(result)
                 }, _metadata)
-                out += "\n\"Figuring things out\"\n"
                 _query = ""
 
         return out
